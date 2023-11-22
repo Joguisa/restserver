@@ -3,6 +3,7 @@ import path from 'path';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import userRouter from '../routes/user.routes';
+import dbConnection from '../../database/config.db';
 dotenv.config();
 
 export class Server {
@@ -12,9 +13,16 @@ export class Server {
     constructor() {
         this.app = express();
         this.usersPath = '/api/user';
+        // Conectar a la base de datos
+        this.connectDatabase();
+
         // Middlewares son funciones que se ejecutan antes de que lleguen a las rutas
         this.middlewares();
         this.routes();
+    }
+
+    async connectDatabase(){
+        await dbConnection();
     }
 
     middlewares() {
