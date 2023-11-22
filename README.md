@@ -9,7 +9,7 @@ Asegúrate de tener Node.js y npm instalados en tu máquina antes de comenzar.
 1. Clona el repositorio:
 
     ```bash
-    git clone https://github.com/joguisa/restserver.git
+    git clone https://github.com/Joguisa/restserver.git
     cd restserver
     ```
 
