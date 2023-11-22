@@ -2,6 +2,7 @@ import express from 'express';
 import path from 'path';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import userRouter from '../routes/user.routes';
 dotenv.config();
 
 export class Server {
@@ -21,13 +22,16 @@ export class Server {
 
         // CORS
         this.app.use( cors() );
+
+        // Lectura y parseo del body
+        this.app.use( express.json() );
+
+        // Directorio público
         this.app.use(express.static(publicPath));
     }
 
     routes() {
-        const routerPath = path.join(__dirname, '../routes');
-        
-        this.app.use(this.usersPath, require(`${routerPath}/user.routes`));
+        this.app.use(this.usersPath, userRouter);
     }
 
     listen() {
