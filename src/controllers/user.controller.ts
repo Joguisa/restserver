@@ -1,4 +1,8 @@
 import { Request, Response } from 'express';
+import User from '../models/user.model';
+import bcryptjs from 'bcryptjs';
+import { validationResult } from 'express-validator';
+
 // En este archivo controller se definen las rutas de la API
 
 const userGet = (req: Request, res: Response) => {
@@ -19,12 +23,34 @@ const userPut = (req: Request, res: Response) => {
     });
 }
 
-const userPost = (req: Request, res: Response) => {
-    const { name, age } =  req.body;
+const userPost = async(req: Request, res: Response) => {
+
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.status(400).json(errors);
+    }
+
+    const { name, email, password, role} =  req.body;
+    const user = new User({ name, email, password, role });
+
+    // Verificar si el correo existe
+    const existEmail = await User.findOne({ email });
+    if ( existEmail ) {
+        return res.status(400).json({
+            msg: 'The email is already registered'
+        });
+    }
+
+    // Encriptar la contraseña
+    const salt = bcryptjs.genSaltSync();
+    user.password = bcryptjs.hashSync( password, salt );
+
+    // Guardar en BD
+    await user.save();
+
     res.json({
         msg: 'post API - Controller',
-        name,
-        age
+        user
     });
 }
 
