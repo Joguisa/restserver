@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-const userSchema = new Schema({
+const UserSchema = new Schema({
     name: {
         type: String,
         required: [true, 'The name is required'],
@@ -30,7 +30,12 @@ const userSchema = new Schema({
         type: Boolean,
         default: false,
     },
-
 });
 
-export default model('User', userSchema);
+UserSchema.methods.toJSON = function() {
+    const { __v, password, ...user } = this.toObject();
+    return user;
+}
+
+
+export const UserModel = model('User', UserSchema);
