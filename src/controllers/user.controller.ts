@@ -5,15 +5,21 @@ import bcryptjs from 'bcryptjs';
 
 // En este archivo controller se definen las rutas de la API
 
-export const userGet = (req: Request, res: Response) => {
-    const { q, name = 'No name', apikey, page = 1, limit } = req.query;
+export const userGet = async(req: Request, res: Response) => {
+
+    const { limit = 5, from = 0 } = req.query;
+    const query = { state: true }
+    
+    const [ total, users ] = await Promise.all([
+        UserModel.countDocuments(query),
+        UserModel.find(query)
+        .skip(Number( from ))
+        .limit(Number( limit ))
+    ]);
+
     res.json({
-        msg: 'get API - Controller',
-        q,
-        name,
-        apikey,
-        page,
-        limit
+        total,
+        users
     });
 };
 
@@ -22,7 +28,6 @@ export const userPut = async(req: Request, res: Response) => {
     const { id } = req.params;
     const { _id, password, google, email, ...rest } = req.body;
 
-    // TODO validar contra base de datos
     if (password) {
         const salt = bcryptjs.genSaltSync();
         rest.password = bcryptjs.hashSync( password, salt );
@@ -31,7 +36,6 @@ export const userPut = async(req: Request, res: Response) => {
     const user = await UserModel.findByIdAndUpdate( id, rest );
 
     res.json({
-        msg: 'put API - Controller',
         user
     });
 };
@@ -58,15 +62,16 @@ export const userPost = async(req: Request, res: Response) => {
     })
 };
 
-export const userDelete = (req: Request, res: Response) => {
-    res.json({
-        msg: 'delete API - Controller'
-    });
-};
+export const userDelete = async(req: Request, res: Response) => {
 
-export const userPatch = (req: Request, res: Response) => {
+    const { id } = req.params;
+    const query = { state: false }
+
+    // No eliminaremos el usuario solo le cambiaremos el estado a false
+    const idDelete = await UserModel.findByIdAndUpdate( id, query );
+
     res.json({
-        msg: 'patch API - Controller'
+        idDelete
     });
 };
 
