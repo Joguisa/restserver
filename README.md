@@ -1,6 +1,19 @@
 # RestServer
 
-Este proyecto es un servidor básico que proporciona ejemplos para comprender los conceptos básicos de RESTful API. El servidor puede procesar operaciones GET, POST, PUT y DELETE, y ahora incluye funcionalidades para realizar operaciones CRUD de usuarios con validaciones correspondientes y lógica separada.
+Este proyecto es un servidor básico que proporciona ejemplos para comprender los conceptos básicos de RESTful API.
+## Temas desarrollados: 
+1. Definir los alcances de nuestro RESTServer
+2. CRUD
+3. Encriptación de contraseñas
+4. Validaciones personalizadas
+5. Creación de roles
+6. Conexiones con MLAB
+7. Despliegue de base de datos en la nube
+8. Conexión con Robo 3T con base de datos en la nube
+9. Configuración de variables de entorno
+10. Borrado de archivos
+    - Eliminado físico de la base de datos
+    - Eliminación por estado en un campo de la colección
 
 ## Configuración
 
